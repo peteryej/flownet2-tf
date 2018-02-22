@@ -1,5 +1,4 @@
 import abc
-import time
 from enum import Enum
 import os
 import tensorflow as tf
@@ -65,8 +64,6 @@ class Net(object):
 
         saver = tf.train.Saver()
 
-	start = time.time()
-#	start = time.time()
         with tf.Session() as sess:
             saver.restore(sess, checkpoint)
             pred_flow = sess.run(pred_flow)[0, :, :, :]
@@ -80,9 +77,6 @@ class Net(object):
             if save_flo:
                 full_out_path = os.path.join(out_path, unique_name + '.flo')
                 write_flow(pred_flow, full_out_path)
-
-	duration = time.time()-start
-	print('duration without model setup time: {}'.format(duration))
 
     def train(self, log_dir, training_schedule, input_a, input_b, flow, checkpoints=None):
         tf.summary.image("image_a", input_a, max_outputs=2)

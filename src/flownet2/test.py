@@ -1,3 +1,4 @@
+import time	
 import argparse
 import os
 from ..net import Mode
@@ -10,6 +11,7 @@ def main():
     # Create a new network
     net = FlowNet2(mode=Mode.TEST)
 
+    start = time.time()
     # Train on the data
     net.test(
         checkpoint='./checkpoints/FlowNet2/flownet-2.ckpt-0',
@@ -17,7 +19,8 @@ def main():
         input_b_path=FLAGS.input_b,
         out_path=FLAGS.out,
     )
-
+    duration = time.time()-start
+    print('one iteration: {}'.format(duration))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
