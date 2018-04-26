@@ -11,16 +11,25 @@ def main():
     # Create a new network
     net = FlowNet2(mode=Mode.TEST)
 
-    start = time.time()
     # Train on the data
     net.test(
         checkpoint='./checkpoints/FlowNet2/flownet-2.ckpt-0',
         input_a_path=FLAGS.input_a,
         input_b_path=FLAGS.input_b,
         out_path=FLAGS.out,
+        batchTestDirectory= FLAGS.batchTestDirectory,
     )
-    duration = time.time()-start
-    print('one iteration: {}'.format(duration))
+
+def testInit(checkpoint):
+    print('start initialization')
+    net = FlowNet2(mode=Mode.TEST)
+    net.testInit(checkpoint)
+    return net
+
+
+def fn2Opflow(net, input_a, input_b):
+    #net = FlowNet2(mode=Mode.TEST)
+    return net.fn2Opflow(input_a, input_b) 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -42,6 +51,11 @@ if __name__ == '__main__':
         required=True,
         help='Path to output flow result'
     )
+    parser.add_argument(
+        '--batchTestDirectory',
+        type=str,
+        help='Directory of input images with the form *-0.png and *-1.png'
+    )
     FLAGS = parser.parse_args()
 
     # Verify arguments are valid
@@ -51,4 +65,6 @@ if __name__ == '__main__':
         raise ValueError('image_b path must exist')
     if not os.path.isdir(FLAGS.out):
         raise ValueError('out directory must exist')
+    #if not os.path.isdir(FLAGS.batchTestDirectory):
+    #    raise ValueError('batch directory must exist')
     main()

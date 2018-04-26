@@ -39,5 +39,13 @@ def antipad(tensor, num=1):
     Performs a crop. "padding" for a deconvolutional layer (conv2d tranpose) removes
     padding from the output rather than adding it to the input.
     """
+    #print(tf.shape(tensor))
+    #batch = tf.shape(tensor)[0]
+    #h = tf.shape(tensor)[1]
+    #w = tf.shape(tensor)[2]
+    #c = tf.shape(tensor)[3]
+    #c = tensor.shape.as_list()[3]
+    #print('batch: {} h: {} w: {} c: {}'.format(batch, h, w, c))
     batch, h, w, c = tensor.shape.as_list()
+
     return tf.slice(tensor, begin=[0, num, num, 0], size=[batch, h - 2 * num, w - 2 * num, c])
